@@ -9,7 +9,6 @@ import com.twocaptcha.api.TwoCaptchaService;
 import javax.swing.JOptionPane;
 import main.java.com.gttools.faucets.controller.ICaptcha;
 import static main.java.com.gttools.faucets.controller.ICaptcha.elementExist;
-import static main.java.com.gttools.faucets.controller.ICaptcha.setResponse;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -45,7 +44,7 @@ public class SatoshiHero implements ICaptcha {
         driver.findElement(By.name("email")).sendKeys("eduper706@gmail.com");
         driver.findElement(By.name("password")).clear();
         driver.findElement(By.name("password")).sendKeys("eduardo706");
-        Thread.sleep(5000);
+        Thread.sleep(8000);
         driver.findElement(By.xpath(loginBtn)).click();
         Thread.sleep(5000);
         if (elementExist(driver, "xPath", loginBtn)) {

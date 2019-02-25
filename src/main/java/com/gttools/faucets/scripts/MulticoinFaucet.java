@@ -1,9 +1,7 @@
 package main.java.com.gttools.faucets.scripts;
 
 import main.java.com.gttools.faucets.controller.ImageCaptcha;
-import java.io.IOException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -29,11 +27,7 @@ public class MulticoinFaucet {
     public boolean isLogged() {
         driver.get(loginURL);
         currentURL = driver.getCurrentUrl();
-        if (currentURL.equals(loginURL)) {
-            return false;
-        } else {
-            return true;
-        }
+        return currentURL.equals(loginURL);
     }
 
     public boolean login() {
@@ -41,13 +35,23 @@ public class MulticoinFaucet {
         driver.findElement(By.id("password")).sendKeys("eduardo706");
         solveCaptcha(true);
         driver.findElement(By.name("login")).click();
-
         currentURL = driver.getCurrentUrl();
-        if (!currentURL.equals(loginURL)) {
-            return true;
-        } else {
-            return false;
+        if (currentURL.equals(loginURL)) {
+            login();
         }
+        return true;
+    }
+
+    public boolean postBalance() {
+        String txt = driver.findElement(By.id("responseMessage")).getText();
+        return txt.isEmpty();
+    }
+
+    public int getBalance() {
+        String balanceStr = driver.findElement(By.id("balance_global")).getText();
+        double balanceDou = Double.parseDouble(balanceStr);
+        balanceDou = balanceDou * 100000000;
+        return (int) balanceDou;
     }
 
     public void solveCaptcha(boolean swith) {
@@ -59,11 +63,16 @@ public class MulticoinFaucet {
         driver.findElement(By.id("visualCaptcha-img-" + imgID)).click();
     }
 
-    public void doRoll(String url, String slideTag) {
+    public void doRoll(String url, String slideTag) throws InterruptedException {
         driver.get(url);
         solveCaptcha(false);
         WebElement slider = driver.findElement(By.xpath(slideTag));
         Actions move = new Actions(driver);
         move.dragAndDropBy(slider, 311, 0).build().perform();
+
+        Thread.sleep(4000);
+        if (postBalance()) {
+            doRoll(url, slideTag);
+        }
     }
 }

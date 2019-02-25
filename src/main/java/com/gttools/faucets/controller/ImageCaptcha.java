@@ -7,7 +7,6 @@ package main.java.com.gttools.faucets.controller;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +15,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import ru.yandex.qatools.ashot.AShot;
@@ -63,9 +61,9 @@ public class ImageCaptcha {
         String file;
 
         if (swith) {
-            file = "src/main/resources/loginimg/" + captchaTitle + ".png";
+            file = "src/main/resources/imgcaptcha/loginimg/" + captchaTitle + ".png";
         } else {
-            file = "src/main/resources/rollimg/" + captchaTitle + ".png";
+            file = "src/main/resources/imgcaptcha/rollimg/" + captchaTitle + ".png";
         }
 
         String file2 = "C:\\temp\\" + imgID + ".png";
@@ -119,7 +117,6 @@ public class ImageCaptcha {
         int index = 0;
 
         for (int i = 0; i < imagList.size(); i++) {
-            System.out.println(imagList.get(i));
             if (max < imagList.get(i)) {
                 max = imagList.get(i);
                 index = i;

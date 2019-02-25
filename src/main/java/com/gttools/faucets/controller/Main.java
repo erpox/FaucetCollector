@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.java.com.gttools.faucets.scripts.SatoshiHero;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -24,17 +25,21 @@ import org.openqa.selenium.chrome.ChromeOptions;
  */
 public class Main {
 
-    WebDriver driver;
-    TrustBtc trus;
+    public WebDriver driver;
+    private TrustBtc trus;
+    private static JavascriptExecutor jse;
+
+    public static String serviceKey = "ab7adca91bf6383714953a6c0601ae37";
 
     public void setUp() throws InterruptedException, IOException {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Edu\\Documents\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+        setJse();
+        //trus = new TrustBtc(driver, "erpox", "eduardo706");
 
-        trus = new TrustBtc(driver);
     }
 
     public void runTrustBTC() {
@@ -58,15 +63,16 @@ public class Main {
         timerReloj.schedule(ttReloj, 1000, 600000);
     }
 
-    public void runMultiFaucet() {
+    public void runMultiFaucet() throws InterruptedException {
         MulticoinFaucet multi = new MulticoinFaucet(driver);
 
-        if (multi.isLogged()) {
+        if (!multi.isLogged()) {
             multi.doRoll(multi.diceURL, multi.slideDice);
             multi.doRoll(multi.faucetURL, multi.slideFaucet);
         } else {
             multi.login();
             multi.doRoll(multi.diceURL, multi.slideDice);
+            multi.postBalance();
             multi.doRoll(multi.faucetURL, multi.slideFaucet);
         }
     }
@@ -81,13 +87,20 @@ public class Main {
         }
     }
 
+    public static JavascriptExecutor getJse() {
+        return jse;
+    }
+
+    public void setJse() {
+        this.jse = (JavascriptExecutor) driver;
+    }
+
     public static void main(String[] args) throws InterruptedException, IOException {
 
         Main maini = new Main();
         maini.setUp();
-       //  maini.runTrustBTC();
-        // maini.runMultiFaucet();
-        maini.rinSatoshiHero();
-
+        //maini.runTrustBTC();
+        maini.runMultiFaucet();
+        //maini.rinSatoshiHero();
     }
 }

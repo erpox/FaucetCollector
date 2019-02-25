@@ -26,9 +26,9 @@ public interface ICaptcha {
      */
     public static void setResponse(JavascriptExecutor jse, TwoCaptchaService service) {
         try {
-            String res = service.solveCaptcha();
+
             jse.executeScript("document.getElementById('g-recaptcha-response')"
-                    + ".value='" + res + "';", new Object[0]);
+                    + ".value='" + service.solveCaptcha() + "';", new Object[0]);
 
         } catch (InterruptedException | IOException ex) {
             Logger.getLogger(ICaptcha.class.getName()).log(Level.SEVERE, null, ex);
